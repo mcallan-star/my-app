@@ -71,7 +71,7 @@ const BreathingApp = () => {
     if (isRunning) {
       animFrameRef.current = requestAnimationFrame(updateAnimation);
     }
-  }, [isRunning]);
+  }, [isRunning]);  
 
   // Phase cycling
   const cyclePhase = useCallback((phase) => {
@@ -124,7 +124,8 @@ const BreathingApp = () => {
       console.log(`Timer fired for phase ${phase}`);
       animationCompleted = true;
       
-      // Determine next phase inline to avoid closure issues
+      // FIX #1: Inlined next phase logic to avoid closure issues with getNextPhase()
+      // Previously this used getNextPhase(phase) which could capture stale values
       let nextPhase;
       if (phase === "inhale") nextPhase = "hold1";
       else if (phase === "hold1") nextPhase = "exhale";
@@ -134,21 +135,23 @@ const BreathingApp = () => {
       
       console.log(`Transitioning from ${phase} → ${nextPhase}`);
       
-      // Use setIsRunning callback to check current state
+      // FIX #2: Use setIsRunning callback to get CURRENT state instead of stale closure
+      // Previously: if (isRunning) - this used stale value from when callback was created
+      // Now: setIsRunning(current => ...) - this gets the actual current state
       setIsRunning(currentIsRunning => {
         if (currentIsRunning) {
           console.log(`State check passed, starting ${nextPhase}`);
-          // Use another setTimeout to ensure clean state transition
+          // FIX #3: Small delay ensures clean state transition between phases
           setTimeout(() => {
             cyclePhase(nextPhase);
           }, 10);
         } else {
           console.log(`Stopping - isRunning is false`);
         }
-        return currentIsRunning; // Don't change the state
+        return currentIsRunning; // Don't change the state, just read it
       });
     }, duration);
-  }, [isBoxMode]); // Removed problematic dependencies
+  }, [isBoxMode]); // FIX #4: Removed isRunning, getPhaseDuration, getNextPhase dependencies that caused stale closures
 
   // Control functions
   const startBreathingCycle = () => {
