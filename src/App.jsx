@@ -35,7 +35,7 @@ const BreathingApp = () => {
   // Toggle switch state
   const [toggleOn, setToggleOn] = useState(false);
 
-  
+
   const timerRef = useRef(null);
   const animStartRef = useRef(null);
   const animDurationRef = useRef(null);
@@ -71,22 +71,22 @@ const BreathingApp = () => {
     const elapsed = now - animStartRef.current;
     const rawProgress = Math.min(elapsed / animDurationRef.current, 1);
     const progress = easeInOutSine(rawProgress);
-    
+
     setAnimProgress(progress);
 
     // Continue animation while running (even during hold phases)
     if (isRunning) {
       animFrameRef.current = requestAnimationFrame(updateAnimation);
     }
-  }, [isRunning]);  
+  }, [isRunning]);
 
   // Phase cycling
   const cyclePhase = useCallback((phase) => {
     console.log(`\n=== STARTING PHASE: ${phase.toUpperCase()} (${getPhaseDuration(phase)}ms) ===`);
-    
+
     setCurrentPhase(phase);
     setAnimProgress(0);
-    
+
     // Clear any existing timers and animations
     if (animFrameRef.current) {
       cancelAnimationFrame(animFrameRef.current);
@@ -94,23 +94,23 @@ const BreathingApp = () => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
-    
+
     // Set up animation timing
     const startTime = Date.now();
     const duration = getPhaseDuration(phase);
     let animationCompleted = false;
-    
+
     // Animation loop
     const animate = () => {
       if (animationCompleted) return;
-      
+
       const now = Date.now();
       const elapsed = now - startTime;
       const rawProgress = Math.min(elapsed / duration, 1);
       const progress = easeInOutSine(rawProgress);
-      
+
       setAnimProgress(progress);
-      
+
       if (elapsed < duration) {
         animFrameRef.current = requestAnimationFrame(animate);
       } else {
@@ -122,7 +122,7 @@ const BreathingApp = () => {
         }
       }
     };
-    
+
     // Start animation immediately
     animFrameRef.current = requestAnimationFrame(animate);
 
@@ -130,7 +130,7 @@ const BreathingApp = () => {
     timerRef.current = setTimeout(() => {
       console.log(`Timer fired for phase ${phase}`);
       animationCompleted = true;
-      
+
       // FIX #1: Inlined next phase logic to avoid closure issues with getNextPhase()
       // Previously this used getNextPhase(phase) which could capture stale values
       let nextPhase;
@@ -139,9 +139,9 @@ const BreathingApp = () => {
       else if (phase === "exhale") nextPhase = "hold2";
       else if (phase === "hold2") nextPhase = "inhale";
       else nextPhase = "inhale";
-      
+
       console.log(`Transitioning from ${phase} → ${nextPhase}`);
-      
+
       // FIX #2: Use setIsRunning callback to get CURRENT state instead of stale closure
       // Previously: if (isRunning) - this used stale value from when callback was created
       // Now: setIsRunning(current => ...) - this gets the actual current state
@@ -151,7 +151,7 @@ const BreathingApp = () => {
           // FIX #3: Small delay ensures clean state transition between phases
           setTimeout(() => {
             cyclePhase(nextPhase);
-          }, 10);
+          }, 10);  // Small delay to ensure state is updated
         } else {
           console.log(`Stopping - isRunning is false`);
         }
@@ -166,7 +166,7 @@ const BreathingApp = () => {
     setIsRunning(true);
     // Use setTimeout to ensure state is updated before starting
     setTimeout(() => {
-      cyclePhase("inhale");
+      cyclePhase("inhale");  //we will always begin with an inhale phase
     }, 0);
   };
 
@@ -175,10 +175,10 @@ const BreathingApp = () => {
     setCurrentPhase(null);
     setAnimProgress(0);
     if (timerRef.current) {
-      clearTimeout(timerRef.current);
+      clearTimeout(timerRef.current);  // Stop any ongoing timer
     }
     if (animFrameRef.current) {
-      cancelAnimationFrame(animFrameRef.current);
+      cancelAnimationFrame(animFrameRef.current);  // Stop any ongoing animation
     }
   };
 
@@ -186,7 +186,7 @@ const BreathingApp = () => {
     setIsBoxMode(!isBoxMode);
   };
 
-  // Cleanup on unmount
+  // Cleanup on unmount 
   useEffect(() => {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
@@ -197,10 +197,10 @@ const BreathingApp = () => {
   // Calculate circle size based on phase and progress
   const getCircleSize = () => {
     if (!currentPhase) return '80px';
-    
+
     const minSize = 80;   // Small circle (empty lungs)
     const maxSize = 240;  // Large circle (full lungs)
-    
+
     let size;
     if (currentPhase === "inhale") {
       // INHALE: Circle grows from small to large (filling lungs)
@@ -221,7 +221,7 @@ const BreathingApp = () => {
     } else {
       size = minSize;
     }
-    
+
     return `${Math.round(size)}px`;
   };
 
@@ -231,30 +231,33 @@ const BreathingApp = () => {
   const nextColor = nextPhase ? phaseColors[nextPhase] : 'rgb(255, 255, 255)';
 
   return (
-  <div className="relative min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4 overflow-hidden">
-    {/* iOS-inspired toggle switch */}
-    <div className="absolute top-4 right-4 z-50 flex items-center space-x-2">
-      <span className="text-white text-sm">{toggleOn ? "Dark Mode" : "Light Mode"}</span>
-      <button
-        onClick={() =>
-          setToggleOn((prev) => {
-            const newState = !prev;
-            console.log("Toggle is now:", newState ? "ON" : "OFF");
-            return newState;
-          })
-        }
-        className={`w-12 h-6 flex items-center rounded-full p-1 duration-300 ease-in-out 
+    <div
+      className={`relative min-h-screen flex flex-col items-center justify-center p-4 overflow-hidden transition-colors duration-500 ${toggleOn ? "bg-indigo-100 text-gray-900" : "bg-gray-900 text-white"
+        }`}
+    >
+      {/* iOS-inspired toggle switch */}
+      <div className="absolute top-4 right-4 z-50 flex items-center space-x-2">
+        <span className="text-white text-sm">{toggleOn ? "Dark Mode" : "Light Mode"}</span>
+        <button
+          onClick={() =>
+            setToggleOn((prev) => {
+              const newState = !prev;
+              console.log("Toggle is now:", newState ? "ON" : "OFF");
+              return newState;
+            })
+          }
+          className={`w-12 h-6 flex items-center rounded-full p-1 duration-300 ease-in-out 
           ${toggleOn ? "bg-green-400" : "bg-gray-400"}`}
-      >
-        <div
-          className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out
+        >
+          <div
+            className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out
             ${toggleOn ? "translate-x-6" : "translate-x-0"}`}
-        />
-      </button>
-  </div>
+          />
+        </button>
+      </div>
 
       <div className="text-center space-y-8">
-        
+
         {/* Mode indicator */}
         <div className="text-white text-lg font-medium">
           Mode: {isBoxMode ? 'Box Breathing' : 'Normal Breathing'}
@@ -265,7 +268,7 @@ const BreathingApp = () => {
           {currentPhase ? (
             <>
               {/* Preview ring (next phase) */}
-              <div 
+              <div
                 className="absolute rounded-full border-4 opacity-30"
                 style={{
                   width: `calc(${circleSize} + 20px)`,
@@ -274,9 +277,9 @@ const BreathingApp = () => {
                   transition: 'none', // Remove CSS transitions to let JS handle animation
                 }}
               />
-              
+
               {/* Main breathing circle */}
-              <div 
+              <div
                 className="relative rounded-full border-4 flex items-center justify-center"
                 style={{
                   width: circleSize,
@@ -287,10 +290,10 @@ const BreathingApp = () => {
                 }}
               >
                 {/* Phase label */}
-                <span 
+                <span
                   className="text-white font-bold select-none"
-                  style={{ 
-                    fontSize: `${Math.max(16, parseInt(circleSize) * 0.1)}px` 
+                  style={{
+                    fontSize: `${Math.max(16, parseInt(circleSize) * 0.1)}px`
                   }}
                 >
                   {getPhaseLabel(currentPhase)}
@@ -325,7 +328,7 @@ const BreathingApp = () => {
           >
             {isRunning ? 'Stop Session' : 'Start Breathing'}
           </button>
-          
+
           <button
             onClick={toggleMode}
             disabled={isRunning}
