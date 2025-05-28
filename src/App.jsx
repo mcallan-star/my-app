@@ -53,13 +53,16 @@ const BreathingApp = () => {
   const [toggleOn, setToggleOn] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [selectedItem, setSelectedItem] = useState("Select an option");
-
+  // Sound state 
+  const [sound, setSound] = useState("none");
 
 
   const timerRef = useRef(null);
   const animStartRef = useRef(null);
   const animDurationRef = useRef(null);
   const animFrameRef = useRef(null);
+  // Audio reference - this will be used to play sound effects
+  const audioRef = useRef(null);
 
   // Utility functions
   const easeInOutSine = (t) => {
@@ -206,13 +209,29 @@ const BreathingApp = () => {
     setIsBoxMode(!isBoxMode);
   };
 
-  // Cleanup on unmount 
+  // Cleanup breathing animation on unmount 
   useEffect(() => {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
     };
   }, []);
+
+  // Play background sound when `sound` changes
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = "";
+    }
+
+    if (sound !== "none") {
+      const audio = new Audio(`/sounds/${sound}.mp3`);
+      audio.loop = true;
+      audio.volume = 0.3;
+      audio.play();
+      audioRef.current = audio;
+    }
+  }, [sound]);
 
   // Calculate circle size based on phase and progress
   const getCircleSize = () => {
@@ -278,28 +297,28 @@ const BreathingApp = () => {
         </button>
       </div>
 
-      {/* dropdown jsx */}
-      <div className="absolute top-4 left-4 z-50 text-sm text-white">
+      {/* dropdown menu */}
+      <div className="absolute bottom-4 left-4 z-50 text-sm text-white">
         <button
-          onClick={() => setShowMenu((prev) => !prev)}
-          className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700 transition"
+          onClick={() => setShowMenu(prev => !prev)}
+          className="px-4 py-2 bg-white/10 backdrop-blur rounded hover:bg-white/20 transition"
         >
-          {selectedItem} ⬇️
+          Sound 🎵
         </button>
 
         {showMenu && (
           <div className="mt-2 bg-white text-black rounded shadow-lg py-1 w-40">
-            {["Option 1", "Option 2", "Option 3"].map((option) => (
+            {["none", "ocean", "fireplace", "deep noise", "cool froggy night", "rain and birds", "rainforest night", "soft rain", "gentle beach"].map((option) => (
               <button
                 key={option}
                 onClick={() => {
-                  setSelectedItem(option);
+                  setSound(option);
                   setShowMenu(false);
                   console.log("Selected:", option);
                 }}
-                className="block w-full text-left px-4 py-2 hover:bg-gray-200"
+                className="block w-full text-left px-4 py-2 hover:bg-gray-200 capitalize"
               >
-                {option}
+                {option === "none" ? "🔇 No Sound" : `🎵 ${option}`}
               </button>
             ))}
           </div>
