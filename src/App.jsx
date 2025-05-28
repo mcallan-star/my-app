@@ -224,7 +224,18 @@ const BreathingApp = () => {
   const nextColor = nextPhase ? phaseColors[nextPhase] : 'rgb(255, 255, 255)';
 
   return (
-    <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4">
+      <div className="relative min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4 overflow-hidden">
+      {/* Top-right toggle button */}
+      <div className="absolute top-4 right-4 z-50 pointer-events-auto">
+        <button
+          onClick={() => console.log("Top-right toggle clicked")}
+          className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-black font-semibold rounded-lg shadow border border-white"
+        >
+          ⚙️ 
+        </button>
+
+      </div>
+
       <div className="text-center space-y-8">
         
         {/* Mode indicator */}
