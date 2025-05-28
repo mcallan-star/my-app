@@ -31,7 +31,7 @@ const BreathingApp = () => {
   const [isBoxMode, setIsBoxMode] = useState(false);
   // circle animation progress (0 to 1)
   const [animProgress, setAnimProgress] = useState(0);
-  
+
   // Toggle switch state
   const [toggleOn, setToggleOn] = useState(false);
 
@@ -234,7 +234,7 @@ const BreathingApp = () => {
   <div className="relative min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4 overflow-hidden">
     {/* iOS-inspired toggle switch */}
     <div className="absolute top-4 right-4 z-50 flex items-center space-x-2">
-      <span className="text-white text-sm">{toggleOn ? "On" : "Off"}</span>
+      <span className="text-white text-sm">{toggleOn ? "Dark Mode" : "Light Mode"}</span>
       <button
         onClick={() =>
           setToggleOn((prev) => {
