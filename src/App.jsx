@@ -55,6 +55,7 @@ const BreathingApp = () => {
   const [selectedItem, setSelectedItem] = useState("Select an option");
   // Sound state 
   const [sound, setSound] = useState("none");
+  const [volume, setVolume] = useState(0.3);
 
 
   const timerRef = useRef(null);
@@ -227,11 +228,19 @@ const BreathingApp = () => {
     if (sound !== "none") {
       const audio = new Audio(`/sounds/${sound}.mp3`);
       audio.loop = true;
-      audio.volume = 0.3;
+      audio.volume = volume;
       audio.play();
       audioRef.current = audio;
     }
   }, [sound]);
+
+  //update volume live
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+      console.log(`Volume set to: ${volume}`);
+    }
+  }, [volume]);
 
   // Calculate circle size based on phase and progress
   const getCircleSize = () => {
@@ -298,33 +307,51 @@ const BreathingApp = () => {
       </div>
 
       {/* dropdown menu */}
-      <div className="absolute bottom-4 left-4 z-50 text-sm text-white">
-        <button
-          onClick={() => setShowMenu(prev => !prev)}
-          className="px-4 py-2 bg-white/10 backdrop-blur rounded hover:bg-white/20 transition"
-        >
-          Sound 🎵
-        </button>
+      <div className="absolute bottom-4 left-4 z-50 text-sm text-white flex items-center space-x-4">
+        {/* Sound Menu */}
+        <div className="relative">
+          <button
+            onClick={() => setShowMenu((prev) => !prev)}
+            className="px-4 py-2 bg-white/10 backdrop-blur rounded hover:bg-white/20 transition"
+          >
+            Sound 🎵
+          </button>
 
-        {showMenu && (
-          <div className="mt-2 bg-white text-black rounded shadow-lg py-1 w-40">
-            {["none", "ocean", "fireplace", "deep noise", "cool froggy night", "rain and birds", "rainforest night", "soft rain", "gentle beach"].map((option) => (
-              <button
-                key={option}
-                onClick={() => {
-                  setSound(option);
-                  setShowMenu(false);
-                  console.log("Selected:", option);
-                }}
-                className="block w-full text-left px-4 py-2 hover:bg-gray-200 capitalize"
-              >
-                {option === "none" ? "🔇 No Sound" : `🎵 ${option}`}
-              </button>
-            ))}
-          </div>
-        )}
+          {showMenu && (
+            <div className="absolute bottom-full mb-2 bg-white text-black rounded shadow-lg py-1 w-40">
+              {["none", "ocean", "rain and birds", "deep noise", "rainforest night", "soft rain","gentle beach", "fireplace", "cool froggy night"].map((option) => (
+                <button
+                  key={option}
+                  onClick={() => {
+                    setSound(option);
+                    setShowMenu(false);
+                  }}
+                  className="block w-full text-left px-4 py-2 hover:bg-gray-200 capitalize"
+                >
+                  {option === "none" ? "🔇 No Sound" : `🎵 ${option}`}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Volume Slider */}
+        <div className="flex flex-col items-start">
+          <label htmlFor="volume-slider" className="text-xs">
+            Volume: {(volume * 100).toFixed(0)}%
+          </label>
+          <input
+            id="volume-slider"
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={volume}
+            onChange={(e) => setVolume(parseFloat(e.target.value))}
+            className="w-32 h-1 accent-blue-400 rounded-lg overflow-hidden appearance-none bg-blue-200"
+          />
+        </div>
       </div>
-
 
       <div className="text-center space-y-8">
 
