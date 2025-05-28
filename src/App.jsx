@@ -242,6 +242,17 @@ const BreathingApp = () => {
     }
   }, [volume]);
 
+  // Use dark class in tailwind.config.js based on toggle state
+  useEffect(() => {
+    const root = document.documentElement;
+    if (toggleOn) {
+      root.classList.remove("dark");
+    } else {
+      root.classList.add("dark");
+    }
+  }, [toggleOn]);
+
+
   // Calculate circle size based on phase and progress
   const getCircleSize = () => {
     if (!currentPhase) return '80px';
@@ -287,7 +298,8 @@ const BreathingApp = () => {
     >
       {/* iOS-inspired toggle switch */}
       <div className="absolute top-4 right-4 z-50 flex items-center space-x-2">
-        <span className="text-white text-sm">{toggleOn ? "☀️" : "🌙"}</span>
+        <span className="text-sm">
+          {toggleOn ? "☀️" : "🌙"}</span>
         <button
           onClick={() =>
             setToggleOn((prev) => {
@@ -307,7 +319,7 @@ const BreathingApp = () => {
       </div>
 
       {/* dropdown menu */}
-      <div className="absolute bottom-4 left-4 z-50 text-sm text-white flex items-center space-x-4">
+      <div className="absolute bottom-4 left-4 z-50 text-sm flex items-center space-x-4">
         {/* Sound Menu */}
         <div className="relative">
           <button
@@ -318,8 +330,9 @@ const BreathingApp = () => {
           </button>
 
           {showMenu && (
-            <div className="absolute bottom-full mb-2 bg-white text-black rounded shadow-lg py-1 w-40">
-              {["none", "ocean", "rain and birds", "deep noise", "rainforest night", "soft rain","gentle beach", "fireplace", "cool froggy night"].map((option) => (
+            <div className="absolute bottom-full mb-2 bg-white text-black
+             dark:bg-gray-800 dark:text-white">
+              {["none", "ocean", "rain and birds", "deep noise", "rainforest night", "soft rain", "gentle beach", "fireplace", "cool froggy night"].map((option) => (
                 <button
                   key={option}
                   onClick={() => {
@@ -356,7 +369,7 @@ const BreathingApp = () => {
       <div className="text-center space-y-8">
 
         {/* Mode indicator */}
-        <div className="text-white text-lg font-medium">
+        <div className="text-lg font-medium">
           Mode: {isBoxMode ? 'Box Breathing' : 'Normal Breathing'}
         </div>
 
@@ -388,7 +401,7 @@ const BreathingApp = () => {
               >
                 {/* Phase label */}
                 <span
-                  className="text-white font-bold select-none"
+                  className="font-bold select-none"
                   style={{
                     fontSize: `${Math.max(16, parseInt(circleSize) * 0.1)}px`
                   }}
@@ -398,7 +411,7 @@ const BreathingApp = () => {
               </div>
             </>
           ) : (
-            <div className="text-white text-center">
+            <div className="text-center">
               <h2 className="text-2xl font-bold mb-4">Welcome</h2>
               <p className="text-lg">Click Start to Begin</p>
             </div>
@@ -408,10 +421,10 @@ const BreathingApp = () => {
         {/* Phase indicator */}
         {currentPhase && (
           <div className="text-center">
-            <div className="text-white text-xl font-medium mb-2">
+            <div className="text-xl font-medium mb-2">
               {getPhaseLabel(currentPhase)}
             </div>
-            <div className="text-gray-300 text-sm">
+            <div className="text-gray-700 dark:text-gray-300 text-sm">
               {isBoxMode ? '4-4-4-4 Pattern' : '4-4-6-1 Pattern'}
             </div>
           </div>
@@ -436,7 +449,7 @@ const BreathingApp = () => {
         </div>
 
         {/* Instructions */}
-        <div className="text-gray-400 text-sm text-center max-w-md">
+        <div className="text-gray-800 dark:text-gray-400 text-sm text-center max-w-md">
           <p className="mb-2">
             <strong>Normal:</strong> Inhale (4s) → Hold (4s) → Exhale (6s) → Hold (1s) = <span className="text-blue-300">15s total</span>
           </p>
