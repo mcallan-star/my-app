@@ -51,6 +51,9 @@ const BreathingApp = () => {
 
   // Toggle switch state
   const [toggleOn, setToggleOn] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const [selectedItem, setSelectedItem] = useState("Select an option");
+
 
 
   const timerRef = useRef(null);
@@ -274,6 +277,35 @@ const BreathingApp = () => {
           />
         </button>
       </div>
+
+      {/* dropdown jsx */}
+      <div className="absolute top-4 left-4 z-50 text-sm text-white">
+        <button
+          onClick={() => setShowMenu((prev) => !prev)}
+          className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700 transition"
+        >
+          {selectedItem} ⬇️
+        </button>
+
+        {showMenu && (
+          <div className="mt-2 bg-white text-black rounded shadow-lg py-1 w-40">
+            {["Option 1", "Option 2", "Option 3"].map((option) => (
+              <button
+                key={option}
+                onClick={() => {
+                  setSelectedItem(option);
+                  setShowMenu(false);
+                  console.log("Selected:", option);
+                }}
+                className="block w-full text-left px-4 py-2 hover:bg-gray-200"
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
 
       <div className="text-center space-y-8">
 
