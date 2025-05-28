@@ -23,6 +23,23 @@ const BreathingApp = () => {
     hold2: 'rgb(204, 153, 255)'     // Soft Violet
   };
 
+  const darkColors = {
+    inhale: 'rgb(128, 179, 255)',   // Sky Blue
+    hold1: 'rgb(179, 153, 255)',    // Lavender
+    exhale: 'rgb(153, 204, 255)',   // Periwinkle
+    hold2: 'rgb(204, 153, 255)'     // Soft Violet
+  };
+
+  const lightColors = {
+    inhale: 'rgb(56, 99, 167)',     // Deeper Sky Blue
+    hold1: 'rgb(123, 85, 200)',     // Deeper Lavender
+    exhale: 'rgb(83, 134, 185)',    // Deeper Periwinkle
+    hold2: 'rgb(145, 96, 195)'      // Deeper Violet
+  };
+
+
+
+
   // Phase State
   const [currentPhase, setCurrentPhase] = useState(null);
   // Animation state
@@ -226,9 +243,11 @@ const BreathingApp = () => {
   };
 
   const circleSize = getCircleSize();
-  const currentColor = currentPhase ? phaseColors[currentPhase] : 'rgb(255, 255, 255)';
+  const themeColors = toggleOn ? lightColors : darkColors;
+  const currentColor = currentPhase ? themeColors[currentPhase] : 'rgb(255, 255, 255)';
+
   const nextPhase = currentPhase ? getNextPhase(currentPhase) : null;
-  const nextColor = nextPhase ? phaseColors[nextPhase] : 'rgb(255, 255, 255)';
+  const nextColor = nextPhase ? themeColors[nextPhase] : 'rgb(255, 255, 255)';
 
   return (
     <div
