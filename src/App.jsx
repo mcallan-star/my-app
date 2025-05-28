@@ -256,7 +256,7 @@ const BreathingApp = () => {
     >
       {/* iOS-inspired toggle switch */}
       <div className="absolute top-4 right-4 z-50 flex items-center space-x-2">
-        <span className="text-white text-sm">{toggleOn ? "Dark Mode" : "Light Mode"}</span>
+        <span className="text-white text-sm">{toggleOn ? "☀️" : "🌙"}</span>
         <button
           onClick={() =>
             setToggleOn((prev) => {
