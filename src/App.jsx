@@ -23,11 +23,18 @@ const BreathingApp = () => {
     hold2: 'rgb(204, 153, 255)'     // Soft Violet
   };
 
-  // State
+  // Phase State
   const [currentPhase, setCurrentPhase] = useState(null);
+  // Animation state
   const [isRunning, setIsRunning] = useState(false);
+  // Mode state
   const [isBoxMode, setIsBoxMode] = useState(false);
+  // circle animation progress (0 to 1)
   const [animProgress, setAnimProgress] = useState(0);
+  
+  // Toggle switch state
+  const [toggleOn, setToggleOn] = useState(false);
+
   
   const timerRef = useRef(null);
   const animStartRef = useRef(null);
@@ -224,17 +231,27 @@ const BreathingApp = () => {
   const nextColor = nextPhase ? phaseColors[nextPhase] : 'rgb(255, 255, 255)';
 
   return (
-      <div className="relative min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4 overflow-hidden">
-      {/* Top-right toggle button */}
-      <div className="absolute top-4 right-4 z-50 pointer-events-auto">
-        <button
-          onClick={() => console.log("Top-right toggle clicked")}
-          className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-black font-semibold rounded-lg shadow border border-white"
-        >
-          ⚙️ 
-        </button>
-
-      </div>
+  <div className="relative min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4 overflow-hidden">
+    {/* iOS-inspired toggle switch */}
+    <div className="absolute top-4 right-4 z-50 flex items-center space-x-2">
+      <span className="text-white text-sm">{toggleOn ? "On" : "Off"}</span>
+      <button
+        onClick={() =>
+          setToggleOn((prev) => {
+            const newState = !prev;
+            console.log("Toggle is now:", newState ? "ON" : "OFF");
+            return newState;
+          })
+        }
+        className={`w-12 h-6 flex items-center rounded-full p-1 duration-300 ease-in-out 
+          ${toggleOn ? "bg-green-400" : "bg-gray-400"}`}
+      >
+        <div
+          className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out
+            ${toggleOn ? "translate-x-6" : "translate-x-0"}`}
+        />
+      </button>
+  </div>
 
       <div className="text-center space-y-8">
         
