@@ -5,6 +5,6 @@
   --color-brand: #4f46e5;    /* now you get bg-brand, text-brand, etc. */
 }
 
-@utility btn-primary {       /* roll your own utility class */
+.btn-primary {
   @apply bg-brand text-white font-medium rounded-lg px-4 py-2;
 }
