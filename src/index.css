@@ -1,10 +1,18 @@
-@import "tailwindcss";
+/* Role:  global, Tailwind-powered, pulled in by Vite/Tailwind plugin.
+loaded by the import in main.jsx, + index.html with <link href="/src/index.css">*/
 
-/* --- optional customisation examples --- */
+@import "tailwindcss";
+/* @layer theme, base, components, utilities;
+@import "./theme.css" layer(theme); has default color palette, type scale, shadows, fonts and more.
+@import "./preflight.css" layer(base);
+@import "./utilities.css" layer(utilities); */
+
+/* --- theme tweaks --- */
 @theme {                     /* replace the old JS config */
   --color-brand: #4f46e5;    /* now you get bg-brand, text-brand, etc. */
+  --font-script: Garamond, serif; /* now you get font-script */
 }
 
 .btn-primary {
-  @apply bg-brand text-white font-medium rounded-lg px-4 py-2;
+@apply bg-brand text-white font-medium rounded-lg px-4 py-2;
 }

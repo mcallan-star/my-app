@@ -1,6 +1,7 @@
+//Role: Kicks it all off -- Entry point for your React app, where the React root is created and <App /> is rendered.
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
+import './index.css'  // Tells Vite to bundle and inject your index.css
 import App from './App.jsx'
 
 createRoot(document.getElementById('root')).render(
@@ -9,17 +10,5 @@ createRoot(document.getElementById('root')).render(
   </StrictMode>,
 )
 
-
-//same code as above 
-// 
-//  // src/main.jsx (or main.tsx)
-// import React from 'react'
-// import ReactDOM from 'react-dom/client'
-// import App from './App.jsx'
-// import './index.css'   // <-- make sure this line is here
-
-// ReactDOM.createRoot(document.getElementById('root')).render(
-//   <React.StrictMode>
-//     <App />
-//   </React.StrictMode>,
-// )
+// createRoot() finds <div id="root"></div> in index.html and creates a React root there.
+//in that root, .render(<App />) puts the App component into the DOM

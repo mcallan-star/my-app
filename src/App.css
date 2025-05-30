@@ -1,3 +1,5 @@
+/* Role:  imported by App.jsx, vanilla CSS, explicitly imported so it only applies when you bring it into your React tree
+Styles targeting IDs/classes used inside your <App/> component. */
 #root {
   max-width: 1280px;
   margin: 0 auto;

@@ -1,13 +1,19 @@
+<!-- Role: links the index.css and the ReactDOM in the main.jsx file -->
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + React</title>
+    <!-- Loads your Tailwind + any global CSS you wrote in index.css -->
+    <link href="/src/index.css" rel="stylesheet">
   </head>
   <body>
+    <!-- ReactDOM will “take over” (render) this div-->
     <div id="root"></div>
+    <!-- This is where Vite loads your JS: it starts at main.jsx -->
     <script type="module" src="/src/main.jsx"></script>
+    <p class="font-script">TESTING: This will use the Great Vibes font family.</p>
   </body>
 </html>
