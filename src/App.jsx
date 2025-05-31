@@ -458,6 +458,10 @@ const BreathingApp = () => {
           </p>
         </div>
       </div>
+      <footer className="absolute bottom-2 text-xs text-gray-500 dark:text-gray-400 hover:text-brand transition-colors duration-300">
+        Built by Madeleine • React + Tailwind • {new Date().getFullYear()}
+      </footer>
+
     </div>
   );
 };
