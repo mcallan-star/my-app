@@ -412,8 +412,8 @@ const BreathingApp = () => {
             </>
           ) : (
             <div className="text-center">
-              <h2 className="text-2xl font-bold mb-4">Welcome</h2>
-              <p className="text-lg">Click Start to Begin</p>
+              <h2 className="text-2xl font-bold mb-4 font-script">Welcome</h2>
+              <p className="text-lg font-script">Click Start to Begin</p>
             </div>
           )}
         </div>
